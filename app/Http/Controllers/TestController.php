@@ -10,4 +10,11 @@ class TestController extends Controller
     {
         return view('welcome');
     }
+
+    public function testPost()
+    {
+        return response()->json([
+            'msg' => 'It is working well'
+        ], 200);
+    }
 }

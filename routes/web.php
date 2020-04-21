@@ -22,3 +22,6 @@ Route::get('/new', 'TestController@controllerMethod');
 Route::any('{slug}', function () {
     return view('welcome');
 });
+
+Route::post('/app/create_tag', 'AdminController@createTag');
+Route::get('/app/get_tags', 'AdminController@getTags');
