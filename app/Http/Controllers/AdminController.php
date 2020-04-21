@@ -18,6 +18,27 @@ class AdminController extends Controller
         ]);
     }
 
+    public function edit_tag(Request $request)
+    {
+        // validate 
+        $this->validate($request, [
+            'tagName' => 'required',
+            'id' => 'required',
+        ]);
+        return Tag::where('id', $request->id)->update([
+            'tagName' => $request->tagName,
+        ]);
+    }
+
+    public function delete_tag(Request $request)
+    {
+        // validate
+        $this->validate($request, [
+            'id' => 'required'
+        ]);
+        return Tag::where('id', $request->id)->delete();
+    }
+
     public function getTags()
     {
         return Tag::orderBy('id', 'desc')->get();
