@@ -29,3 +29,4 @@ Route::post('/app/delete_tag', 'AdminController@delete_tag');
 Route::get('/app/get_tags', 'AdminController@getTags');
 
 Route::post('/app/upload', 'AdminController@upload');
+Route::post('app/delete_image', 'AdminController@delete_image');
