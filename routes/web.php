@@ -27,3 +27,5 @@ Route::post('/app/create_tag', 'AdminController@createTag');
 Route::post('/app/edit_tag', 'AdminController@edit_tag');
 Route::post('/app/delete_tag', 'AdminController@delete_tag');
 Route::get('/app/get_tags', 'AdminController@getTags');
+
+Route::post('/app/upload', 'AdminController@upload');

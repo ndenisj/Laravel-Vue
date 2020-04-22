@@ -4,13 +4,20 @@ Vue.use(Router);
 
 import firstPage from "./components/pages/myFirstVuePage";
 import newPage from "./components/pages/new-route";
-import TagPage from "./components/pages/admin/tags";
+
+// admin pages
+import TagPage from "./admin/pages/tags";
+import CategoryPage from "./admin/pages/category";
 
 const routes = [
     // Project Routes..........
     {
         path: "/tags",
         component: TagPage
+    },
+    {
+        path: "/category",
+        component: CategoryPage
     },
     // Basic Test Routes ..............
     {
