@@ -30,3 +30,5 @@ Route::get('/app/get_tags', 'AdminController@getTags');
 
 Route::post('/app/upload', 'AdminController@upload');
 Route::post('app/delete_image', 'AdminController@delete_image');
+Route::post('app/create_category', 'AdminController@create_category');
+Route::get('app/get_categories', 'AdminController@get_categories');

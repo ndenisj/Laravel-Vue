@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Tag;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,10 @@ class AdminController extends Controller
     }
 
     //
+    public function get_categories()
+    {
+        return Category::orderBy('id', 'desc')->get();
+    }
     public function upload(Request $request)
     {
         $this->validate($request, [
@@ -67,5 +72,17 @@ class AdminController extends Controller
             @unlink($filePath);
         }
         return;
+    }
+    public function create_category(Request $request)
+    {
+        // validate 
+        $this->validate($request, [
+            'categoryName' => 'required',
+            'iconImage' => 'required',
+        ]);
+        return Category::create([
+            'categoryName' => $request->categoryName,
+            'iconImage' => '/uploads/' . $request->iconImage,
+        ]);
     }
 }

@@ -16,6 +16,7 @@
               <!-- TABLE TITLE -->
               <tr>
                 <th>ID</th>
+                <th>ICON IMAGE</th>
                 <th>CATEGORY NAME</th>
                 <th>CREATED AT</th>
                 <th>Action</th>
@@ -23,17 +24,20 @@
               <!-- TABLE TITLE -->
 
               <!-- ITEMS -->
-              <tr v-for="(tag, i) in tags" :key="i" v-if="tags.length">
+              <tr v-for="(category, i) in categories" :key="i" v-if="categories.length">
                 <td>{{i+1}}</td>
-                <td class="_table_name">{{tag.tagName}}</td>
-                <td>{{tag.created_at}}</td>
+                <td class="table_image">
+                  <img class="img" :src="category.iconImage" />
+                </td>
+                <td class="_table_name">{{category.categoryName}}</td>
+                <td>{{category.created_at}}</td>
                 <td>
-                  <Button type="info" shape="circle" @click="showEditModal(tag, i)">Edit</Button>
+                  <Button type="info" shape="circle" @click="showEditModal(category, i)">Edit</Button>
                   <Button
                     type="error"
                     shape="circle"
                     @click="showDeletingModal(tag, i)"
-                    :loading="tag.isDeleting"
+                    :loading="category.isDeleting"
                   >Delete</Button>
                 </td>
               </tr>
@@ -44,7 +48,11 @@
 
         <!-- Add Category modal -->
         <Modal v-model="addModal" title="Add Category" :mask-closable="false" :closable="false">
-          <Input v-model="data.tagName" placeholder="Enter category name..." style="width: 100%" />
+          <Input
+            v-model="data.categoryName"
+            placeholder="Enter category name..."
+            style="width: 100%"
+          />
           <div class="space"></div>
           <Upload
             ref="uploads"
@@ -73,15 +81,12 @@
               </div>
             </div>
           </template>
-          <!-- <div class="image_thumb" v-if="data.iconImage">
-            <img :src="`/uploads/${data.iconImage}`" />
-          </div>-->
 
           <div slot="footer">
             <Button type="default" @click="addModal=false">Close</Button>
             <Button
               type="primary"
-              @click="addTag"
+              @click="addCategory"
               :disabled="isAdding"
               :loading="isAdding"
             >{{isAdding?'Adding...':'Add category'}}</Button>
@@ -139,7 +144,7 @@ export default {
       deleteItem: {},
       isDeleting: false,
       isAdding: false,
-      tags: [],
+      categories: [],
       data: {
         categoryName: "",
         iconImage: ""
@@ -155,21 +160,29 @@ export default {
   },
 
   methods: {
-    async addTag() {
-      if (this.data.tagName.trim() == "")
-        return this.error("You can't keep the tag name field empty");
+    async addCategory() {
+      if (this.data.categoryName.trim() == "")
+        return this.error("You can't keep the category name field empty");
+
+      if (this.data.iconImage.trim() == "")
+        return this.error("Icon Image is required");
 
       this.isAdding = true;
-      const res = await this.callApi("post", "/app/create_tag", this.data);
+      const res = await this.callApi("post", "/app/create_category", this.data);
       if (res.status == 201) {
-        this.tags.unshift(res.data); // push to first position
+        this.categories.unshift(res.data); // push to first position
         this.addModal = false;
-        this.data.tagName = "";
-        this.success("Tag added successfully");
+        this.data.categoryName = "";
+        this.data.iconImage = "";
+        this.$refs.uploads.clearFiles();
+        this.success("Category added successfully");
       } else {
         if (res.status == 422) {
-          if (res.data.errors.tagName[0]) {
-            this.error(res.data.errors.tagName[0]);
+          if (res.data.errors.categoryName[0]) {
+            this.error(res.data.errors.categoryName[0]);
+          }
+          if (res.data.errors.iconImage[0]) {
+            this.error(res.data.errors.iconImage[0]);
           }
         } else {
           this.info("Something went wrong");
@@ -277,9 +290,9 @@ export default {
 
   async created() {
     this.token = window.Laravel.csrfToken;
-    const res = await this.callApi("get", "/app/get_tags");
+    const res = await this.callApi("get", "/app/get_categories");
     if (res.status == 200) {
-      this.tags = res.data;
+      this.categories = res.data;
     } else {
       this.info("Something went wrong");
     }

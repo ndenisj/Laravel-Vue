@@ -3242,3 +3242,6 @@ i.cross_icon {
     cursor: pointer;
     margin: 0 2px;
 }
+.table_image img {
+    width: 30px;
+}
